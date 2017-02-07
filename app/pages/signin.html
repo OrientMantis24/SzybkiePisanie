@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="szybkiePisanie">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+
+</head>
+
+<body ng-controller="SignInCtrl">
+	<div class="container">
+		<div class="jumbotron" class="text-center" style="padding-bottom:0px;">
+			<h2>Zaloguj się!</h2>
+		</div>
+		<form class="form-signin" role="form">
+			<input ng-model="user.email" class="form-control" placeholder="Email address" autofocus="">
+			<input ng-model="user.password" type="password" class="form-control" placeholder="Password">
+			<label class="checkbox">
+                <a href="#"> Rejestracja</>
+        </label>
+			<button type="button" ng-click="SignIn($event)" class="btn btn-lg btn-primary btn-block">Zaloguj się</button>
+		</form>
+
+	</div>
+
+
+
+</body>
+
+</html>

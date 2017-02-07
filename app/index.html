@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html ng-app="szybkiePisanie">
+
+<head>
+  <!-- SCROLLS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+  <!-- SPELLS -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<!-- define angular controller -->
+<body style="padding:0px; background-color:white">
+
+  <nav class="navbar navbar-default" style="background-color:#352fd5">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/" style="color:white">Szybkie Pisanie</a>
+      </div>
+
+      <ul class="nav navbar-nav navbar">
+        <li><a href="#home" style="color:white"><i class="fa fa-home"></i> Strona domowa</a></li>
+        <li><a href="#home" style="color:white"><i class="fa fa-tasks"></i> Trening</a></li>
+        <li><a href="#home" style="color:white"><i class="fa fa-rocket"></i> Wyścig</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#signin" style="color:white"><i class="fa fa-home"></i> Zaloguj się</a></li>
+        <li><a href="#register" style="color:white"><i class="fa fa-shield"></i> Rejestracja</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="main" style="background-color:white">
+  <div class="container">
+  <div class="jumbotron">
+    <div ng-view class="text-center"></div>
+  </div>
+  </div>
+  </div>
+  
+  <footer class="text-center">
+    <p>Bartosz Ociepka 2017</p>
+  </footer>
+  
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	<script>
+    var config = {
+    apiKey: "AIzaSyCo0sc3Vsv9XKbYa6taoQYDS2B_PsHbdXw",
+    authDomain: "keyboardrace.firebaseapp.com",
+    databaseURL: "https://keyboardrace.firebaseio.com"
+  };
+  firebase.initializeApp(config);
+  </script>
+</html>
