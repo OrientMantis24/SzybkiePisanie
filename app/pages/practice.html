@@ -8,18 +8,17 @@
 
 	<link href="//getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
-
 </head>
 
-<body>
-	
-    <h1>Szybkie Pisanie</h1>      
-    <p>Portal dla ludzi chcących polepszyć swoje umiejętności szybkiego pisania.</p>
-  </div>
-  <p>Zalogować do portalu możesz się <a href="#signin">tutaj</a>.</p>      
-  <p>A <a href="#practice">tutaj</a> wejdź żeby się sprawdzić.</p>
+<body ng-controller="PracticeCtrl">
+	<div class="container-fluid">
+		<p id="wordsperminute">Słowa na minutę: </p>
 
+		<input id='inputBox' class="form-control" id="ex2" type="text">
+		<div id="wholeText"><span id="firstWord"><span id="highlight"></span><span id="nohighlight">Wybieranie tekstu...</span></span><span id="text"></span></div>
+	</div>
 
 </body>
+
 
 </html>
