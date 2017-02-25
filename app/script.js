@@ -120,8 +120,8 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
     var counter = 0;
     var start = 0;
 
-    
-        firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
+
+    firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
         debugger;
         var text = snapshot.val().Text;
         var textSplit = text.split(' ');
@@ -135,6 +135,12 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
             document.getElementById('text').textContent += (textSplit[i] + ' ');
         }
         var user = firebase.auth().currentUser;
+    })
+
+
+    document.getElementById('reloadButton').addEventListener('click', function () {
+        debugger;
+        window.location.reload();
     })
 
     document.getElementById('inputBox').addEventListener('input', function () {
@@ -162,28 +168,35 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                 document.getElementById('wordsperminute').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
                 document.getElementById('nohighlight').textContent += textTable[0] + ' ';
                 document.getElementById('highlight').textContent = "";
-                for (var i = 1; i < textTable.length-1; i++) {
+                for (var i = 1; i < textTable.length - 1; i++) {
                     document.getElementById('text').textContent += (textTable[i] + ' ');
                 }
                 break;
             case ' ':
                 document.getElementById('inputBox').value = "";
                 break;
-                case (firstWord[0]):
-                if (textTable.length==1){
-                document.getElementById('inputBox').value = "";
-                counter++;
-                document.getElementById('wordsperminute').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
-                alert("Wygrana!" + time / 1000 + " sekund.");
-                counter = 0;}
+            case (firstWord[0]):
+                if (textTable.length == 1) {
+                    document.getElementById('inputBox').value = "";
+                    document.getElementById('wholeText').textContent = "";
+                    counter++;
+                    document.getElementById('wordsperminute').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
+                    document.getElementById('success-box').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
+                    document.getElementById('success-box').hidden = false;
+                    document.getElementById('wordsperminute').hidden = true;
+                    counter = 0;
+                    document.getElementById('textEnded').hidden = false;
+                }
+                break;
             default:
-                if(input == (firstWord[0] + ' ').substring(0, input.length))document.getElementById('highlight').style.backgroundColor = 'green';
+                if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
                 else document.getElementById('highlight').style.backgroundColor = 'red';
 
                 document.getElementById('nohighlight').textContent = (firstWord[0] + ' ').substring(input.length, (firstWord[0] + ' ').length);
                 document.getElementById('highlight').textContent = (firstWord[0] + ' ').substring(0, input.length);
 
         }
+
     });
 }
 ]);
