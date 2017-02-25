@@ -81,15 +81,14 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
             debugger;
             if (errorCode === 'auth/wrong-password') {
                 alert('Błędne hasło.');
-            } 
-            else if(errorCode === 'auth/invalid-email') {
+            }
+            else if (errorCode === 'auth/invalid-email') {
                 alert('Nieprawidłowy adres email');
             }
-            else if(errorCode === 'auth/user-disabled') {
+            else if (errorCode === 'auth/user-disabled') {
                 alert('Użytkownik zablokowany');
             }
-            else if(errorCode)
-            {
+            else if (errorCode) {
                 alert(errorMessage);
             }
         });
@@ -100,7 +99,13 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
 szybkiePisanie.controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
 
     var user = firebase.auth().currentUser;
-    document.getElementById('activationEmail').addEventListener('click', function () { user.sendEmailVerification().then(function () { alert("Wysłano mejl aktywacyjny!"); }, function (error) { alert(error) }) });
+    document.getElementById('activationEmail').addEventListener('click', function () { 
+        user = firebase.auth().currentUser;
+        user.sendEmailVerification().then(function () { 
+        document.getElementById('activationEmailSent').className = "label label-success";
+        document.getElementById('activationEmailSent').hidden = false;
+        document.getElementById('activationEmail').hidden = true;
+     }, function (error) { alert(error) }) });
     if (user) {
         document.getElementById('email').textContent = user.email;
         if (user.emailVerified === false) {
@@ -126,24 +131,25 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
     var randomNumber = Math.floor((Math.random() * 1) + 0);
     var counter = 0;
     var start = 0;
+    var textLength;
 
-<<<<<<< HEAD
-
-    firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
-        debugger;
-=======
-    
         firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
->>>>>>> origin/master
         var text = snapshot.val().Text;
         var textSplit = text.split(' ');
+        textLength = textSplit.length;
 
         document.getElementById('nohighlight').textContent = "";
         document.getElementById('nohighlight').textContent = textSplit[0] + ' ';
         for (var i = 1; i < textSplit.length; i++) {
             document.getElementById('text').textContent += (textSplit[i] + ' ');
         }
-    })
+
+        document.getElementById('progressBar').style.width = "0%";
+    }).catch(function(error){
+        document.getElementById('nohighlight').textContent = "Musisz się zalogować aby potrenować.";
+    }
+    )
+
 
 
     document.getElementById('reloadButton').addEventListener('click', function () {
@@ -175,6 +181,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                 for (var i = 1; i < textTable.length - 1; i++) {
                     document.getElementById('text').textContent += (textTable[i] + ' ');
                 }
+                document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
                 break;
             case ' ':
                 document.getElementById('inputBox').value = "";
@@ -190,6 +197,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     document.getElementById('wordsperminute').hidden = true;
                     counter = 0;
                     document.getElementById('textEnded').hidden = false;
+                    document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
                 }
                 break;
             default:
