@@ -71,20 +71,27 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
             var errorMessage = error.message;
 
             if (email.length < 4) {
-                alert('Please enter an email address.');
+                alert('Proszę wpisać adres email.');
                 return;
             }
             if (password.length < 4) {
-                alert('Please enter a password.');
+                alert('Proszę wpisać hasło.');
                 return;
             }
-
+            debugger;
             if (errorCode === 'auth/wrong-password') {
-                alert('Wrong password.');
-            } else {
+                alert('Błędne hasło.');
+            } 
+            else if(errorCode === 'auth/invalid-email') {
+                alert('Nieprawidłowy adres email');
+            }
+            else if(errorCode === 'auth/user-disabled') {
+                alert('Użytkownik zablokowany');
+            }
+            else if(errorCode)
+            {
                 alert(errorMessage);
             }
-            console.log(error);
         });
     }
 }
@@ -122,27 +129,19 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
 
     
         firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
-        debugger;
         var text = snapshot.val().Text;
         var textSplit = text.split(' ');
 
         document.getElementById('nohighlight').textContent = "";
         document.getElementById('nohighlight').textContent = textSplit[0] + ' ';
-        document.getElementById('nohighlight').style.fontSize = "120%";
-        document.getElementById('highlight').style.fontSize = "120%";
-        document.getElementById('wholeText').style.float = "left";
         for (var i = 1; i < textSplit.length; i++) {
             document.getElementById('text').textContent += (textSplit[i] + ' ');
         }
-        var user = firebase.auth().currentUser;
     })
 
     document.getElementById('inputBox').addEventListener('input', function () {
-
-        debugger;
         var firstWord = document.getElementById('firstWord').textContent.split(' ');
         var textTable = text.textContent.split(' ');
-        console.log(textTable);
         if (start == 0) {
             var date = new Date();
             start = date.getTime();
@@ -150,7 +149,6 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
         var date = new Date();
         var stop = date.getTime();
         var time = stop - start;
-        debugger;
         var input = document.getElementById('inputBox').value;
 
         switch (input) {
