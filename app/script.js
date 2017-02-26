@@ -64,6 +64,7 @@ szybkiePisanie.controller('RegisterCtrl', ["$scope", "$firebaseAuth", function (
 
 szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
     $scope.SignIn = function (event) {
+        var location = window.location;
         if ($scope.user.email != undefined) var email = $scope.user.email; else { alert("Wpisz adres e-mail"); return; }
         if ($scope.user.password != undefined) var password = $scope.user.password; else { alert("Wpisz hasło"); return; }
         firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
@@ -91,7 +92,10 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
             else if (errorCode) {
                 alert(errorMessage);
             }
-        });
+        })
+            ;
+
+
     }
 }
 ]);
@@ -99,13 +103,14 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
 szybkiePisanie.controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
 
     var user = firebase.auth().currentUser;
-    document.getElementById('activationEmail').addEventListener('click', function () { 
+    document.getElementById('activationEmail').addEventListener('click', function () {
         user = firebase.auth().currentUser;
-        user.sendEmailVerification().then(function () { 
-        document.getElementById('activationEmailSent').className = "label label-success";
-        document.getElementById('activationEmailSent').hidden = false;
-        document.getElementById('activationEmail').hidden = true;
-     }, function (error) { alert(error) }) });
+        user.sendEmailVerification().then(function () {
+            document.getElementById('activationEmailSent').className = "label label-success";
+            document.getElementById('activationEmailSent').hidden = false;
+            document.getElementById('activationEmail').hidden = true;
+        }, function (error) { alert(error) })
+    });
     if (user) {
         document.getElementById('email').textContent = user.email;
         if (user.emailVerified === false) {
@@ -133,7 +138,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
     var start = 0;
     var textLength;
 
-        firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
+    firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
         var text = snapshot.val().Text;
         var textSplit = text.split(' ');
         textLength = textSplit.length;
@@ -145,10 +150,13 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
         }
 
         document.getElementById('progressBar').style.width = "0%";
-    }).catch(function(error){
+    }).catch(function (error) {
         document.getElementById('nohighlight').textContent = "Musisz się zalogować aby potrenować.";
+        firebase.auth().signInAnonymously().then(function () {
+            window.location.reload();
+        })
     }
-    )
+        )
 
 
 
@@ -199,6 +207,13 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     document.getElementById('textEnded').hidden = false;
                     document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
                 }
+                else {
+                    if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
+                    else document.getElementById('highlight').style.backgroundColor = 'red';
+
+                    document.getElementById('nohighlight').textContent = (firstWord[0] + ' ').substring(input.length, (firstWord[0] + ' ').length);
+                    document.getElementById('highlight').textContent = (firstWord[0] + ' ').substring(0, input.length);
+                }
                 break;
             default:
                 if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
@@ -215,24 +230,28 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
 
 function initApp($window) {
     firebase.auth().onAuthStateChanged(function (user) {
-        //debugger;
+        debugger;
         if (user) {
-            document.getElementById('notLoggedIn').hidden = true;
-            document.getElementById('loggedIn').hidden = false;
-            document.getElementById('profile').textContent = user.email;
+            debugger;
+            if (!user.isAnonymous) {
+                if (window.location.hash == '#/register') window.location.hash = '#/';
+                document.getElementById('notLoggedIn').hidden = true;
+                document.getElementById('loggedIn').hidden = false;
+                document.getElementById('profile').textContent = user.email;
 
-            //Profile
-            if (document.getElementById('email') !== null) {
-                document.getElementById('email').textContent = user.email;
-                if (user.emailVerified === false) {
-                    document.getElementById('emailVerified').textContent = 'nie';
-                    document.getElementById('emailVerifiedRow').className = 'danger';
-                    document.getElementById('activationEmail').hidden = false;
+                //Profile
+                if (document.getElementById('email') !== null) {
+                    document.getElementById('email').textContent = user.email;
+                    if (user.emailVerified === false) {
+                        document.getElementById('emailVerified').textContent = 'nie';
+                        document.getElementById('emailVerifiedRow').className = 'danger';
+                        document.getElementById('activationEmail').hidden = false;
+                    }
+                    else {
+                        document.getElementById('emailVerified').textContent = 'tak';
+                        document.getElementById('emailVerifiedRow').className = 'success';
+                    };
                 }
-                else {
-                    document.getElementById('emailVerified').textContent = 'tak';
-                    document.getElementById('emailVerifiedRow').className = 'success';
-                };
             }
         } else {
             debugger;
