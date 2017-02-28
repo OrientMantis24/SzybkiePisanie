@@ -139,6 +139,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
     var textLength;
 
     firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
+        debugger;
         var text = snapshot.val().Text;
         var textSplit = text.split(' ');
         textLength = textSplit.length;
@@ -150,6 +151,9 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
         }
 
         document.getElementById('progressBar').style.width = "0%";
+        document.getElementById('Author').textContent = snapshot.val().Author;
+        document.getElementById('Title').textContent = snapshot.val().Title;
+        document.getElementById('trivia_image').src = snapshot.val().Image;
     }).catch(function (error) {
         document.getElementById('nohighlight').textContent = "Musisz się zalogować aby potrenować.";
         firebase.auth().signInAnonymously().then(function () {
@@ -162,7 +166,9 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
 
     document.getElementById('reloadButton').addEventListener('click', function () {
         debugger;
-        window.location.reload();
+        //window.location.reload();
+        
+                    $("#trivia").hide().fadeIn(2000);
     })
 
     document.getElementById('inputBox').addEventListener('input', function () {
@@ -206,6 +212,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     counter = 0;
                     document.getElementById('textEnded').hidden = false;
                     document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
+                    
                 }
                 else {
                     if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
@@ -263,6 +270,8 @@ function initApp($window) {
         document.getElementById('profile').value = "";
 
         document.getElementById('logout').addEventListener('click', function () { firebase.auth().signOut(); }, false);
+
+        $("#trivia").hide();
     })
 };
 

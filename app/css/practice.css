@@ -12,5 +12,35 @@
 
 #inputBox{
     font-size:20px;
-    height:50px;
+    height:40px;
+}
+
+#textEnded{
+    display: block;
+    height: 2em;
+}
+
+#reloadButton{
+    float:right;
+}
+
+#trivia{
+    display: block;
+}
+
+#trivia_image{
+    height: 10em;
+    width: 10em;
+    display: block; 
+    float:left;
+}
+
+#trivia_text{
+    display: block;
+    float: center;
+    left: 5%;
+}
+
+#trivia_image_wrapper{
+    float: left;
 }
