@@ -21,15 +21,23 @@
 }
 
 #reloadButton{
-    float:right;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+}
+
+#mainMenuButton{
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
 }
 
 #trivia{
-    display: block;
+    display: none;
 }
 
 #trivia_image{
-    height: 10em;
+    height: 15em;
     width: 10em;
     display: block; 
     float:left;
@@ -43,4 +51,15 @@
 
 #trivia_image_wrapper{
     float: left;
+}
+
+.progress{
+    position: relative;
+}
+
+.progress span{
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: black;
 }

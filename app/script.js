@@ -133,7 +133,7 @@ szybkiePisanie.controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($
 
 szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
     debugger;
-    var randomNumber = Math.floor((Math.random() * 1) + 0);
+    var randomNumber = Math.floor((Math.random() * 2) + 0);
     var counter = 0;
     var start = 0;
     var textLength;
@@ -154,8 +154,8 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
         document.getElementById('Author').textContent = snapshot.val().Author;
         document.getElementById('Title').textContent = snapshot.val().Title;
         document.getElementById('trivia_image').src = snapshot.val().Image;
+        document.getElementById('Text').textContent = snapshot.val().Trivia;
     }).catch(function (error) {
-        document.getElementById('nohighlight').textContent = "Musisz się zalogować aby potrenować.";
         firebase.auth().signInAnonymously().then(function () {
             window.location.reload();
         })
@@ -168,7 +168,12 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
         debugger;
         //window.location.reload();
         
+        
                     $("#trivia").hide().fadeIn(2000);
+                    $('#inputBox').hide();
+                    $('.progress').hide();
+                    $('#wholeText').hide();
+        //$("#trivia").hide().fadeIn(2000);
     })
 
     document.getElementById('inputBox').addEventListener('input', function () {
@@ -196,6 +201,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     document.getElementById('text').textContent += (textTable[i] + ' ');
                 }
                 document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
+                document.getElementById('progressBarText').textContent = (Math.floor(counter / (time /1000/60))).toString() + "słów na minutę";
                 break;
             case ' ':
                 document.getElementById('inputBox').value = "";
@@ -212,7 +218,9 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     counter = 0;
                     document.getElementById('textEnded').hidden = false;
                     document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
-                    
+                    $("#trivia").hide().fadeIn(2000);
+                    $('#inputBox').hide();
+                    $('.progress').hide();
                 }
                 else {
                     if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
