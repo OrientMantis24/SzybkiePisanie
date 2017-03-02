@@ -24,16 +24,28 @@
     position: absolute;
     bottom: 2px;
     right: 2px;
+    background-color: blue;
 }
 
 #mainMenuButton{
     position: absolute;
-    bottom: 2px;
-    left: 2px;
+    bottom: 0px;
+    left: 0px;
+    background: #428BCA;
+    border: none;
+    opacity: 1;
+    transition: all 0.3s ease 0s;
+}
+
+#mainMenuButton:hover{
+    background: #3071A9;
 }
 
 #trivia{
     display: none;
+    background: #d3ddea;
+    border-radius: 25px;
+    border: 4px solid blue;
 }
 
 #trivia_image{
