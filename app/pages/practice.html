@@ -12,7 +12,10 @@
 </head>
 
 <body ng-controller="PracticeCtrl">
+	 <div class="container">
+    <div class="jumbotron" id="jumbotron">
 	<div class="container-fluid">
+		<div id="textEnded"><a href="#/" type="button" class="btn btn-success" id="mainMenuButton">Menu Główne</button></a><a href="#practice" type="button" class="btn btn-success" id="reloadButton">Nowy wyścig</button></a></div>
 		<p id="wordsperminute">Słowa na minutę: </p>
 		<div class="alert alert-success fade in" id="success-box" hidden>
 			Twój wynik to <strong>Success!</strong> słów na minutę.
@@ -25,16 +28,25 @@
 	</div>
 	<input id='inputBox' class="form-control" id="ex2" type="text">
 	<div id="wholeText"><span id="firstWord"><span id="highlight"></span><span id="nohighlight">Wybieranie tekstu...</span></span><span id="text"></span></div>
-	<div id="textEnded"><a href="#/" type="button" class="btn btn-success" id="mainMenuButton">Menu Główne</button></a><a href="#practice" type="button" class="btn btn-success" id="reloadButton">Nowy wyścig</button></a></div>
+	
 	<div class="jumbotron" id="trivia"hidden>
-		<p="trivia_image_wrapper">
-			<img src="http://www.fabryka.pl/uploads/tx_evoproducts/ku/bu/kubus-puchatek_alan-alexander-milne-99901778883_978-83-10-12031-1_600.jpg"
-				id="trivia_image"></p>
-				<p id="trivia_text"><strong id="Author">A. A. Milne</strong><br><strong id="Title">Kubuś puchatek</strong><br/>
-					<div id="Text">Coś tam o tej ksiażce czy co to tam miałoby być tak żeby było fajnie napisane i ludzie mogli się czegoś z tego dowiedzieć</div>
-				</p>
+		<table>
+			<tr style="text-align:center">
+				<th style="text-align : center; white-space: nowrap"><div><strong>Właśnie napisałeś cytat z</strong></div></th>
+				<th style="text-align:center; margin-left: 5%"><div><strong>Czy wiesz że?</strong></div</th>
+			</tr>
+			<tr>
+				<th style="text-align:center"><p id="trivia_image_wrapper">
+				<img src="http://www.fabryka.pl/uploads/tx_evoproducts/ku/bu/kubus-puchatek_alan-alexander-milne-99901778883_978-83-10-12031-1_600.jpg" id="trivia_image"></p>
+				<p id="trivia_text"><strong id="Author">A. A. Milne</strong><br><strong id="Title">Kubuś puchatek</strong><br/></p></th>
+				<th style="text-align:center"><div id="Text">Coś tam o tej ksiażce czy co to tam miałoby być tak żeby było fajnie napisane i ludzie mogli się czegoś z tego dowiedzieć</div></th>
+			</tr>
+			
+			</table>
 	</div>
 
+	</div>
+	</div>
 	</div>
 
 </body>

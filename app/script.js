@@ -8,6 +8,7 @@ szybkiePisanie.config(function ($routeProvider) {
         // route for the home page
         .when('/', {
             templateUrl: 'pages/home.html',
+            controller: 'HomeCtrl'
         })
 
         .when('/signin', {
@@ -31,11 +32,55 @@ szybkiePisanie.config(function ($routeProvider) {
         });
 });
 
+
+szybkiePisanie.controller('HomeCtrl', ["$scope", "$rootScope", "$firebaseAuth", "$interval", function ($scope, $rootScope, $firebaseAuth, $interval) {
+    if (firebase.auth().currentUser == null) firebase.auth().signInAnonymously();
+
+    $scope.results = [{}];
+    console.log($scope.results[0]);
+    console.log($scope.results[1]);
+
+    for (i = 0; i < 10; i++) {
+        firebase.database().ref('Latest/' + i.toString()).once('value').then(function (snapshot) {
+            var Index = snapshot.val().Index;
+
+
+            $scope.results[Index - 1] = ({
+                'username': snapshot.val().user.toString(),
+                'text': snapshot.val().text.toString(),
+                'result': snapshot.val().speed.toString()
+            });
+
+            $scope.$apply();
+            $('#loadingGif').fadeOut(200);
+            $("#latestScoresTable").fadeIn(2000);
+        })
+    }
+
+    $interval(function () {
+        for (i = 0; i < 10; i++) {
+            firebase.database().ref('Latest/' + i.toString()).once('value').then(function (snapshot) {
+                var Index = snapshot.val().Index;
+
+
+                $scope.results[Index - 1] = ({
+                    'username': snapshot.val().user.toString(),
+                    'text': snapshot.val().text.toString(),
+                    'result': snapshot.val().speed.toString()
+                });
+
+
+            })
+        }
+    }, 5000);
+
+}])
+
 szybkiePisanie.controller('RegisterCtrl', ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
 
 
     $scope.Register = function (event) {
-        debugger;
+        ;
         var successful = true;
         if ($scope.user.email != undefined) var email = $scope.user.email; else { alert("Wpisz mejl"); return; }
         if ($scope.user.password != undefined) var password = $scope.user.password; else { alert("Wpisz haslo"); return; }
@@ -63,7 +108,11 @@ szybkiePisanie.controller('RegisterCtrl', ["$scope", "$firebaseAuth", function (
 
 
 szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
+
+    
+
     $scope.SignIn = function (event) {
+        if(firebase.auth().currentuser != null && firebase.auth().currentUser.isAnonymous)firebase.auth().signOut();
         var location = window.location;
         if ($scope.user.email != undefined) var email = $scope.user.email; else { alert("Wpisz adres e-mail"); return; }
         if ($scope.user.password != undefined) var password = $scope.user.password; else { alert("Wpisz hasło"); return; }
@@ -79,7 +128,7 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
                 alert('Proszę wpisać hasło.');
                 return;
             }
-            debugger;
+            ;
             if (errorCode === 'auth/wrong-password') {
                 alert('Błędne hasło.');
             }
@@ -93,7 +142,6 @@ szybkiePisanie.controller("SignInCtrl", ["$scope", "$firebaseAuth", function ($s
                 alert(errorMessage);
             }
         })
-            ;
 
 
     }
@@ -131,15 +179,15 @@ szybkiePisanie.controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($
 
 ]);
 
-szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
-    debugger;
+szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth, $q) {
+    ;
     var randomNumber = Math.floor((Math.random() * 2) + 0);
     var counter = 0;
     var start = 0;
     var textLength;
+    $scope.wordsperminute;
 
     firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
-        debugger;
         var text = snapshot.val().Text;
         var textSplit = text.split(' ');
         textLength = textSplit.length;
@@ -165,15 +213,14 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
 
 
     document.getElementById('reloadButton').addEventListener('click', function () {
-        debugger;
-        //window.location.reload();
-        
-        
-                    $("#trivia").hide().fadeIn(2000);
-                    $('#inputBox').hide();
-                    $('.progress').hide();
-                    $('#wholeText').hide();
+        //handleLastestScoresChange();
+        window.location.reload();
+
+
         //$("#trivia").hide().fadeIn(2000);
+        //$('#inputBox').hide();
+        // $('.progress').hide();
+        // $('#wholeText').hide();
     })
 
     document.getElementById('inputBox').addEventListener('input', function () {
@@ -201,7 +248,7 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     document.getElementById('text').textContent += (textTable[i] + ' ');
                 }
                 document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
-                document.getElementById('progressBarText').textContent = (Math.floor(counter / (time /1000/60))).toString() + "słów na minutę";
+                document.getElementById('progressBarText').textContent = (Math.floor(counter / (time / 1000 / 60))).toString() + "słów na minutę";
                 break;
             case ' ':
                 document.getElementById('inputBox').value = "";
@@ -215,12 +262,16 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
                     document.getElementById('success-box').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
                     document.getElementById('success-box').hidden = false;
                     document.getElementById('wordsperminute').hidden = true;
+                    console.log(Math.floor(counter / (time / 1000 / 60)));
+                    $scope.wordsperminute = Math.floor(counter / (time / 1000 / 60));
                     counter = 0;
                     document.getElementById('textEnded').hidden = false;
                     document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
+                    
                     $("#trivia").hide().fadeIn(2000);
                     $('#inputBox').hide();
                     $('.progress').hide();
+                    handleLastestScoresChange();
                 }
                 else {
                     if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
@@ -240,14 +291,67 @@ szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function (
         }
 
     });
+
+    function handleLastestScoresChange() {
+
+        var newLatestScores = [{}];
+
+        debugger;
+
+        getNewLatestScores(newLatestScores).then(function() {;
+
+
+        console.log(newLatestScores);
+        for (var i = 0; i < 10; i++) {
+            console.log(i);
+            console.log(newLatestScores[i]);
+            firebase.database().ref('Latest/' + i.toString()).set ({
+                user:newLatestScores[i].username,
+                text:newLatestScores[i].text,
+                speed:newLatestScores[i].result,
+                Index:i+1
+                })
+            
+        }
+        })
+    }
+
+    async function getNewLatestScores(newLatestScores) {
+        console.log(firebase.auth().currentUser.isAnonymous);
+    for (var i = 9; i >= 0; i--) {
+            if (i == 0 && firebase.auth().currentUser.isAnonymous === false) {
+                newLatestScores[i] = ({
+                    'username': firebase.auth().currentUser.email,
+                    'text': document.getElementById('Title').textContent,
+                    'result': $scope.wordsperminute
+                })
+            }
+            else if(i == 0 && firebase.auth().currentUser.isAnonymous === true){
+                newLatestScores[i] = ({
+                    'username': "Anonymous",
+                    'text': document.getElementById('Title').textContent,
+                    'result': $scope.wordsperminute
+                })
+            }
+            else {
+                await firebase.database().ref('Latest/' + (i-1).toString()).once('value').then(function (snapshot) {
+                    newLatestScores[snapshot.val().Index] = ({
+                    'username': snapshot.val().user,
+                    'text': snapshot.val().text,
+                    'result': snapshot.val().speed
+                })
+                })    
+            }
+
+        }
+    }
 }
 ]);
 
+
 function initApp($window) {
     firebase.auth().onAuthStateChanged(function (user) {
-        debugger;
         if (user) {
-            debugger;
             if (!user.isAnonymous) {
                 if (window.location.hash == '#/register') window.location.hash = '#/';
                 document.getElementById('notLoggedIn').hidden = true;
@@ -269,7 +373,6 @@ function initApp($window) {
                 }
             }
         } else {
-            debugger;
             document.getElementById('notLoggedIn').hidden = false;
             document.getElementById('loggedIn').hidden = true;
             document.getElementById('profile').textContent = "";

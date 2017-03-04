@@ -1,0 +1,48 @@
+.jumbotron{
+    position: relative;
+}
+
+#navbar{
+    background: linear-gradient(to top, #3774a8, #428BCA);
+    border-radius: 15px;
+}
+
+body{
+    background-color: #95b9f4;
+}
+
+#main{
+    background-color: #e3ecf9;
+}
+
+#jumbotron{
+    background-color: white;
+    border-radius: 25px;
+}
+
+#footer{
+    text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    margin-bottom: 0px;
+    display: inline;
+}
+
+.hvr-rotate {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px transparent;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+.hvr-rotate:hover, .hvr-rotate:focus, .hvr-rotate:active {
+  -webkit-transform: rotate(4deg);
+  transform: rotate(4deg);
+}
