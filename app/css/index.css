@@ -1,13 +1,18 @@
+html {
+    height: 100%;
+}
+
 .jumbotron{
     position: relative;
 }
 
 #navbar{
     background: linear-gradient(to top, #3774a8, #428BCA);
-    border-radius: 15px;
 }
 
 body{
+    position: relative;
+    min-height: 100%;
     background-color: #95b9f4;
 }
 
@@ -21,14 +26,13 @@ body{
 }
 
 #footer{
-    text-align: center;
-    background-color: white;
-    border-radius: 5px;
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
-    margin-bottom: 0px;
-    display: inline;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  text-align: center;
+  margin-bottom: 0px;
 }
 
 .hvr-rotate {

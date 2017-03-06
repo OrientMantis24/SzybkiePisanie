@@ -37,8 +37,6 @@ szybkiePisanie.controller('HomeCtrl', ["$scope", "$rootScope", "$firebaseAuth", 
     if (firebase.auth().currentUser == null) firebase.auth().signInAnonymously();
 
     $scope.results = [{}];
-    console.log($scope.results[0]);
-    console.log($scope.results[1]);
 
     for (i = 0; i < 10; i++) {
         firebase.database().ref('Latest/' + i.toString()).once('value').then(function (snapshot) {
@@ -97,10 +95,6 @@ szybkiePisanie.controller('RegisterCtrl', ["$scope", "$firebaseAuth", function (
                 alert('Please enter a password.');
                 return;
             }
-
-            alert(error);
-            console.log(error);
-            return;
         }
         )
     }
@@ -179,7 +173,7 @@ szybkiePisanie.controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($
 
 ]);
 
-szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth, $q) {
+szybkiePisanie.controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
     ;
     var randomNumber = Math.floor((Math.random() * 2) + 0);
     var counter = 0;
@@ -371,6 +365,11 @@ function initApp($window) {
                         document.getElementById('emailVerifiedRow').className = 'success';
                     };
                 }
+            }
+            else {
+                  document.getElementById('notLoggedIn').hidden = false;
+                  document.getElementById('loggedIn').hidden = true;
+                  document.getElementById('profile').textContent = "";
             }
         } else {
             document.getElementById('notLoggedIn').hidden = false;
