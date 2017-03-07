@@ -1,52 +1,61 @@
 <!DOCTYPE html>
 
-<!-- define angular app -->
 <html ng-app="szybkiePisanie">
 
 <head>
 
-  <link rel ="shortcup icon" type="image/png" href="/favicon.png"/>
-  <!-- SCROLLS -->
+  <link rel ="shortcup icon" type="image/png" href="/assets/favicon.png"/>
+
+  <!--CSS-->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+	<link rel="stylesheet" href="//getbootstrap.com/examples/signin/signin.css">
   <link rel="stylesheet" href="css/index.css" />
+  <link href="/Home/home.css" rel="stylesheet">
+	<link href="/Practice/practice.css" rel="stylesheet">
+  <link href="/SignIn/signin.css" rel="stylesheet">
+	<link href="/Register/register.css" rel="stylesheet">
 
-  <!-- SPELLS -->
+  <!-- SCRIPTS -->
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-route/angular-route.min.js"></script>
   <script src="script.js"></script>
+  <script src="Home/HomeCtrl.js"></script>
+  <script src="Practice/PracticeCtrl.js"></script>
+  <script src="SignIn/SignInCtrl.js"></script>
+  <script src="Register/RegisterCtrl.js"></script>
+  <script src="Profile/ProfileCtrl.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
-<!-- define angular controller -->
 <body style="padding:0px; background-color: #e3ecf9">
 
   <nav id="navbar" class="navbar navbar-default">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#/" style="color:white">Szybkie Pisanie</a>
+        <a class="navbar-brand" href="#home" id="navbar-text">Szybkie Pisanie</a>
       </div>
 
-      <ul class="nav navbar-nav navbar">
-        <li class="hvr-rotate"><a href="#practice" style="color:white"><i class="fa fa-tasks"></i> Trening</a></li>
-        <li class="hvr-rotate"><a href="http://www.szybkiepisanieweb.wordpress.com" style="color:white"><i class="fa fa-book"></i> BLOG</a></li>
+      <ul class="nav navbar-nav navbar" >
+        <li class="hvr-rotate"><a href="#practice" id="navbar-text"><i class="fa fa-tasks"></i> Trening</a></li>
+        <li class="hvr-rotate"><a href="http://www.szybkiepisanieweb.wordpress.com" id="navbar-text"><i class="fa fa-book"></i> BLOG</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right" id="notLoggedIn">
-        <li><a href="#signin" style="color:white"><i class="fa fa-home"></i> Zaloguj się</a></li>
-        <li><a href="#register" style="color:white"><i class="fa fa-shield"></i> Rejestracja</a></li>
+        <li><a href="#signin" id="navbar-text"><i class="fa fa-home"></i> Zaloguj się</a></li>
+        <li><a href="#register" id="navbar-text"><i class="fa fa-shield"></i> Rejestracja</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right" id="loggedIn" hidden>
-        <li><a href="#profile" style="color:white" id="profile"><i class="fa fa-home"></i> Profil</a></li>
-        <li><a href="#signin" style="color:white" id="logout"><i class="fa fa-shield"></i> Wyloguj się</a></li>
+        <li><a href="#profile" id="profile" id="navbar-text" ><i class="fa fa-home"></i> Profil</a></li>
+        <li><a href="#signin" id="logout" id="navbar-text"><i class="fa fa-shield"></i> Wyloguj się</a></li>
       </ul>
 
     </div>
   </nav>
 
-  <div id="main">
-    <div ng-view class="text-center"></div>
+  <div id="main" ng-app="szybkiePisanie">
+    <div ng-view></div>
   </div>
   
     <p id="footer">Bartosz Ociepka 2017</p>

@@ -50,3 +50,19 @@ body{
   -webkit-transform: rotate(4deg);
   transform: rotate(4deg);
 }
+
+.container {
+    width: 100%;
+}
+
+#navbar-text{
+    color: white;
+}
+
+#profile {
+    color: white;
+}
+
+#logout {
+    color: white;
+}
