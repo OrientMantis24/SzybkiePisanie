@@ -1,5 +1,5 @@
 angular.module('szybkiePisanie')
-    .controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
+    .controller("ProfileCtrl", ["$scope", "$firebaseAuth", "$rootScope", function ($scope, $firebaseAuth) {
         var user = firebase.auth().currentUser;
         document.getElementById('activationEmail').addEventListener('click', function () {
             user = firebase.auth().currentUser;

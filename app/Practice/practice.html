@@ -1,36 +1,37 @@
 <div class="container">
 	<div class="jumbotron" id="jumbotron">
 		<div class="container-fluid">
-			<p id="wordsperminute">Słowa na minutę: </p>
-			<div class="alert alert-success fade in" id="success-box" hidden>
-				Twój wynik to <strong>Success!</strong> słów na minutę.
-			</div>
+			<div id="wordsperminute" class="alert" ng-class={'alert-success':wordsPerMinuteSuccess}>Słowa na minutę: {{wordsperminute}}</div>
 			<div class="progress">
-				<div id="progressBar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
-					aria-valuemax="100" style="width:0%">
+				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+					ng-style="progressBar">
 					<span id="progressBarText"></span>
 			</div>
 		</div>
-		<input id='inputBox' class="form-control" id="ex2" type="text">
-		<div id="wholeText"><span id="firstWord"><span id="highlight"></span><span id="nohighlight">Wybieranie tekstu...</span></span><span id="text"></span></div>
+		<input id='inputBox' class="form-control" id="ex2" type="text" ng-model="input" ng-change="inputChanged()" ng-trim="false">
+		<div id="wholeText">
+			<span id="firstWord">
+				<span id="highlight">{{firstWordHighlight}}</span><span id="nohighlight">{{firstWordNoHighlight}}</span>
+			</span>
+			<span id="text">{{latterWords}}</span>
+		</div>
 
-		<div class="jumbotron" id="trivia" hidden>
+		<div class="jumbotron" id="trivia" ng-show="showTrivia">
 			<table>
 				<tr style="text-align:center">
 					<th style="text-align : center; white-space: nowrap">
 						<div><strong>Właśnie napisałeś cytat z</strong></div>
 					</th>
 					<th style="text-align:center; margin-left: 5%">
-						<div><strong>Czy wiesz że?</strong></div</th>
+						<div><strong>{{trivia.title}}  {{trivia.author}}</strong></div</th>
 				</tr>
 				<tr>
 					<th style="text-align:center">
 						<p id="trivia_image_wrapper">
-							<img id="trivia_image"></p>
-						<p id="trivia_text"><strong id="Author">A. A. Milne</strong><br><strong id="Title">Kubuś puchatek</strong><br/></p>
+							<img id="trivia_image" src={{trivia.image}}></p>
 					</th>
 					<th style="text-align:center">
-						<div id="Text"></div>
+						<div id="Text">{{trivia.text}}</div>
 					</th>
 				</tr>
 
