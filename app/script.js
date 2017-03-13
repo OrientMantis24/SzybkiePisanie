@@ -3,6 +3,10 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
         $rootScope.navbarRightLogout = "";
         $rootScope.navbarRightProfile = "";
         $rootScope.linkEnabled;
+        $rootScope.emailVerified;
+        $rootScope.sendVerificationEmail = true;
+        $rootScope.verificationEmailSent = false;
+        $rootScope.showVerificationStatus = true;
         $rootScope.logoutClick = function() {
             if($rootScope.linkEnabled)window.location = "#register";
             else firebase.auth().signOut();
@@ -15,6 +19,21 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
                 $rootScope.navbarRightLogout = "Wyloguj się";
                 $rootScope.signInProfile = "#profile";
                 $rootScope.linkEnabled = false;
+                $rootScope.email = user.email;
+
+                if(user.emailVerified) {
+                    $rootScope.emailVerified  = true;
+                    $rootScope.sendVerificationEmail = false;
+                    $rootScope.verificationEmailSent = false;
+                    $rootScope.showVerificationStatus = true;
+                }
+                else {
+                    $rootScope.emailVerified = false;
+                    $rootScope.sendVerificationEmail = true;
+                    $rootScope.verificationEmailSent = false;
+                    $rootScope.showVerificationStatus = true;
+                }
+
                 $rootScope.$apply();
 
                    
