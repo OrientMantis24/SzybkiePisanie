@@ -1,5 +1,7 @@
 html {
     height: 100%;
+    overflow: -moz-scrollbars-vertical; 
+    overflow-y: scroll;
 }
 
 .jumbotron{
@@ -65,4 +67,8 @@ body{
 
 #logout {
     color: white;
+}
+
+.logout {
+    cursor: pointer;
 }

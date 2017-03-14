@@ -3,15 +3,18 @@
 		<tr>
 			<th>Adres e-mail</th>
 			<th>
+<<<<<<< HEAD
 				<div id="email" ng-model="email">email</div>
+=======
+				<div>{{email}}</div>
+>>>>>>> origin/master
 			</th>
 		</tr>
 		<tr id="emailVerifiedRow">
 			<th>Adres e-mail zweryfikowany?</th>
 			<th>
-				<div id="emailVerified">email_verified</div>
+				<div><span ng-show="showVerificationStatus">{{emailVerified ? "Adres pomyślnie zweryfikowany" : "Nie"}}</span><button ng-show="sendVerificationEmail" ng-click="sendVerificationEmailFunction()">Wyślij email aktywacyjny</button><span ng-show="verificationEmailSent">Pomyslnie wysłano email aktywacyjny</span></div>
 			</th>
-			<th><button id="activationEmail" hidden>Wyślij email aktywacyjny</button><label hidden id="activationEmailSent">Wysłano email aktywacyjny</label></tr>
 		</tr>
 	</table>
 </div>

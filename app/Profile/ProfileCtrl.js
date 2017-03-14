@@ -1,14 +1,24 @@
 angular.module('szybkiePisanie')
+<<<<<<< HEAD
     .controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
         $scope.email;
+=======
+    .controller("ProfileCtrl", ["$scope", "$firebaseAuth", "$rootScope", function ($scope, $firebaseAuth, $rootScope) {
+>>>>>>> origin/master
         var user = firebase.auth().currentUser;
-        document.getElementById('activationEmail').addEventListener('click', function () {
+
+        $scope.sendVerificationEmailFunction = function() {
+            debugger;
             user = firebase.auth().currentUser;
             user.sendEmailVerification().then(function () {
-                document.getElementById('activationEmailSent').className = "label label-success";
-                document.getElementById('activationEmailSent').hidden = false;
-                document.getElementById('activationEmail').hidden = true;
+                    $rootScope.sendVerificationEmail = false;
+                    $rootScope.verificationEmailSent = true;
+                    $rootScope.showVerificationStatus = false;
+                    $scope.$apply();
+                    $rootScope.$apply();
+                
             }, function (error) { alert(error) })
+<<<<<<< HEAD
         });
         if (user) {
             $scope.email = user.email;
@@ -25,5 +35,7 @@ angular.module('szybkiePisanie')
         else {
             $scope.email = "";
             document.getElementById('emailVerified').textContent = "";
+=======
+>>>>>>> origin/master
         }
     }]);

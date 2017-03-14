@@ -1,4 +1,53 @@
 angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
+    .run(['$rootScope', function($rootScope) {
+        $rootScope.navbarRightLogout = "";
+        $rootScope.navbarRightProfile = "";
+        $rootScope.linkEnabled;
+        $rootScope.emailVerified;
+        $rootScope.sendVerificationEmail = true;
+        $rootScope.verificationEmailSent = false;
+        $rootScope.showVerificationStatus = true;
+        $rootScope.logoutClick = function() {
+            if($rootScope.linkEnabled)window.location = "#register";
+            else firebase.auth().signOut();
+        }
+
+    firebase.auth().onAuthStateChanged(function (user) {
+        debugger;
+        if (user && user.isAnonymous === false) {
+                $rootScope.navbarRightProfile = user.email;
+                $rootScope.navbarRightLogout = "Wyloguj się";
+                $rootScope.signInProfile = "#profile";
+                $rootScope.linkEnabled = false;
+                $rootScope.email = user.email;
+
+                if(user.emailVerified) {
+                    $rootScope.emailVerified  = true;
+                    $rootScope.sendVerificationEmail = false;
+                    $rootScope.verificationEmailSent = false;
+                    $rootScope.showVerificationStatus = true;
+                }
+                else {
+                    $rootScope.emailVerified = false;
+                    $rootScope.sendVerificationEmail = true;
+                    $rootScope.verificationEmailSent = false;
+                    $rootScope.showVerificationStatus = true;
+                }
+
+                $rootScope.$apply();
+
+                   
+                
+        } else {
+             $rootScope.navbarRightProfile = "Zaloguj się";
+             $rootScope.navbarRightLogout = "Zarejestruj się";
+             $rootScope.signInProfile = "#signin";
+             $rootScope.linkEnabled = true;
+             $rootScope.$apply();
+        }
+    })
+
+    }])
     .config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider
@@ -31,44 +80,3 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
                     redirectTo: '/home'
                 })
         }]);
-
-function initApp($window) {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user && user.isAnonymous === false) {
-                document.getElementById('notLoggedIn').hidden = true;
-                document.getElementById('loggedIn').hidden = false;
-                document.getElementById('profile').textContent = user.email;
-
-                //Profile
-                if (document.getElementById('email') !== null) {
-                    document.getElementById('email').textContent = user.email;
-                    if (user.emailVerified === false) {
-                        document.getElementById('emailVerified').textContent = 'nie';
-                        document.getElementById('emailVerifiedRow').className = 'danger';
-                        document.getElementById('activationEmail').hidden = false;
-                    }
-                    else {
-                        document.getElementById('emailVerified').textContent = 'tak';
-                        document.getElementById('emailVerifiedRow').className = 'success';
-                    };
-                }
-        } else {
-            document.getElementById('notLoggedIn').hidden = false;
-            document.getElementById('loggedIn').hidden = true;
-            document.getElementById('profile').textContent = "";
-        }
-
-        document.getElementById('profile').value = "";
-
-        document.getElementById('logout').addEventListener('click', function () { firebase.auth().signOut(); }, false);
-
-        $("#trivia").hide();
-    })
-};
-
-
-
-
-window.onload = function ($window) {
-    initApp($window);
-};

@@ -42,13 +42,8 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right" id="notLoggedIn">
-        <li><a href="#signin" id="navbar-text"><i class="fa fa-home"></i> Zaloguj się</a></li>
-        <li><a href="#register" id="navbar-text"><i class="fa fa-shield"></i> Rejestracja</a></li>
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right" id="loggedIn" hidden>
-        <li><a href="#profile" id="profile" id="navbar-text" ><i class="fa fa-home"></i> Profil</a></li>
-        <li><a href="#signin" id="logout" id="navbar-text"><i class="fa fa-shield"></i> Wyloguj się</a></li>
+        <li><a id="navbar-text" ng-href={{signInProfile}}><i class="fa fa-home"></i> {{navbarRightProfile}}</a></li>
+        <li><a id="navbar-text" ng-click="logoutClick()" class="logout"><i class="fa fa-shield"></i> {{navbarRightLogout}}</a></li>
       </ul>
 
     </div>

@@ -1,37 +1,57 @@
 angular.module('szybkiePisanie')
     .controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
         var randomNumber = Math.floor((Math.random() * 2) + 0);
-        var counter = 0;
         var start = 0;
-        var textLength;
+        $scope.text;
+        $scope.showTrivia = false;
+        $scope.textTable;
+        $scope.firstWord;
+        $scope.firstWordHighlight;
+        $scope.firstWordNoHighlight ;
+        $scope.latterWords = "";
         $scope.wordsperminute;
+        $scope.wordsPerMinuteSuccess = false;
+        $scope.textLength;
+        $scope.input;
+        $scope.trivia = {
+            author: "",
+            title: "",
+            image: "",
+            text: ""
+        };
+        $scope.counter = 0;
+        $scope.progressBar = {
+            "width": "0%"
+        }
 
-        firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
-            var text = snapshot.val().Text;
-            var textSplit = text.split(' ');
-            textLength = textSplit.length;
+        var promises = [];
 
-            document.getElementById('nohighlight').textContent = "";
-            document.getElementById('nohighlight').textContent = textSplit[0] + ' ';
-            for (var i = 1; i < textSplit.length; i++) {
-                document.getElementById('text').textContent += (textSplit[i] + ' ');
-            }
+        if(firebase.auth().currentUser === null)promises.push(firebase.auth().signInAnonymously());
 
-            document.getElementById('progressBar').style.width = "0%";
-            document.getElementById('Author').textContent = snapshot.val().Author;
-            document.getElementById('Title').textContent = snapshot.val().Title;
-            document.getElementById('trivia_image').src = snapshot.val().Image;
-            document.getElementById('Text').textContent = snapshot.val().Trivia;
-        }).catch(function (error) {
-            firebase.auth().signInAnonymously().then(function () {
-                window.location.reload();
+        Promise.all(promises).then(function() {
+        getText();
+        })
+        function getText() {
+            firebase.database().ref('Texts/' + randomNumber.toString()).once('value').then(function (snapshot) {
+                $scope.text = snapshot.val().Text;
+                $scope.textTable = $scope.text.split(' ');
+                $scope.textLength = $scope.textTable.length;
+                $scope.firstWord = $scope.textTable[0];
+                $scope.firstWordNoHighlight = $scope.firstWord + ' ';
+                for (var i = 1; i < $scope.textTable.length; i++) {
+                    $scope.latterWords += ($scope.textTable[i] + ' ');
+                }
+
+                $scope.progressBar.width = "0%";
+                $scope.trivia.author = snapshot.val().Author;
+                $scope.trivia.title = snapshot.val().Title;
+                $scope.trivia.image = snapshot.val().Image;
+                $scope.trivia.text = snapshot.val().Trivia;
+                $scope.$apply();
             })
         }
-            )
 
-        document.getElementById('inputBox').addEventListener('input', function () {
-            var firstWord = document.getElementById('firstWord').textContent.split(' ');
-            var textTable = text.textContent.split(' ');
+        $scope.inputChanged = function () {
             if (start == 0) {
                 var date = new Date();
                 start = date.getTime();
@@ -39,112 +59,100 @@ angular.module('szybkiePisanie')
             var date = new Date();
             var stop = date.getTime();
             var time = stop - start;
-            var input = document.getElementById('inputBox').value;
 
-            switch (input) {
-                case (firstWord[0] + ' '):
-                    document.getElementById('text').textContent = "";
-                    document.getElementById('nohighlight').textContent = "";
-                    document.getElementById('inputBox').value = "";
-                    counter++;
-                    document.getElementById('wordsperminute').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
-                    document.getElementById('nohighlight').textContent += textTable[0] + ' ';
-                    document.getElementById('highlight').textContent = "";
-                    for (var i = 1; i < textTable.length - 1; i++) {
-                        document.getElementById('text').textContent += (textTable[i] + ' ');
+
+
+            switch ($scope.input) {
+                case ($scope.firstWord + ' '):
+                    $scope.textTable.shift();
+                    $scope.firstWord = $scope.textTable[0];
+                    $scope.firstWordHighlight = "";
+                    $scope.firstWordNoHighlight = $scope.firstWord;
+                    $scope.latterWords = "";
+                    $scope.input = "";
+                    $scope.counter++;
+                    $scope.wordsperminute = Math.floor($scope.counter / (time / 1000 / 60));
+                    for (var i = 1; i < $scope.textTable.length; i++) {
+                        $scope.latterWords += ($scope.textTable[i] + ' ');
                     }
-                    document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
-                    document.getElementById('progressBarText').textContent = (Math.floor(counter / (time / 1000 / 60))).toString() + "słów na minutę";
+                    $scope.progressBar.width = (Math.floor($scope.counter / $scope.textLength * 100)).toString() + "%";
                     break;
                 case ' ':
-                    document.getElementById('inputBox').value = "";
+                    $scope.input = "";
                     break;
-                case (firstWord[0]):
-                    if (textTable.length == 1) {
-                        document.getElementById('inputBox').value = "";
-                        document.getElementById('wholeText').textContent = "";
-                        counter++;
-                        document.getElementById('wordsperminute').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
-                        document.getElementById('success-box').textContent = "Słowa na minutę: " + Math.floor(counter / (time / 1000 / 60));
-                        document.getElementById('success-box').hidden = false;
-                        document.getElementById('wordsperminute').hidden = true;
-                        console.log(Math.floor(counter / (time / 1000 / 60)));
-                        $scope.wordsperminute = Math.floor(counter / (time / 1000 / 60));
-                        counter = 0;
-                        document.getElementById('textEnded').hidden = false;
-                        document.getElementById('progressBar').style.width = (Math.floor(counter / textLength * 100)).toString() + "%";
+                case ($scope.firstWord):
+                    if ($scope.textTable.length == 1) {
 
-                        $("#trivia").hide().fadeIn(2000);
+                        $scope.input = "";
+                        $scope.firstWord = "";
+                        $scope.firstWordHighlight = "";
+                        $scope.firstWordNoHighlight = "";
+                        $scope.counter++;
+                        $scope.wordsPerMinuteSuccess = true;
+                        $scope.wordsperminute = Math.floor($scope.counter / (time / 1000 / 60));
+                        $scope.counter = 0;
+                        $scope.progressBar.width = "0%";
+
+                        $scope.showTrivia = true;
+                        $("#trivia").fadeIn(2000);
                         $('#inputBox').hide();
                         $('.progress').hide();
                         handleLastestScoresChange();
                     }
-                    else {
-                        if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
-                        else document.getElementById('highlight').style.backgroundColor = 'red';
-
-                        document.getElementById('nohighlight').textContent = (firstWord[0] + ' ').substring(input.length, (firstWord[0] + ' ').length);
-                        document.getElementById('highlight').textContent = (firstWord[0] + ' ').substring(0, input.length);
-                    }
-                    break;
                 default:
-                    if (input == (firstWord[0] + ' ').substring(0, input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
+                    if ($scope.input == ($scope.firstWord + ' ').substring(0, $scope.input.length)) document.getElementById('highlight').style.backgroundColor = 'green';
                     else document.getElementById('highlight').style.backgroundColor = 'red';
 
-                    document.getElementById('nohighlight').textContent = (firstWord[0] + ' ').substring(input.length, (firstWord[0] + ' ').length);
-                    document.getElementById('highlight').textContent = (firstWord[0] + ' ').substring(0, input.length);
+                    $scope.firstWordNoHighlight = ($scope.firstWord + ' ').substring($scope.input.length, ($scope.firstWord + ' ').length);
+                    $scope.firstWordHighlight = ($scope.firstWord + ' ').substring(0, $scope.input.length);
 
             }
 
-        });
+        };
 
         function handleLastestScoresChange() {
-
-            var newLatestScores = [{}];
-
-            getNewLatestScores(newLatestScores).then(function () {
-                console.log(newLatestScores);
+            $scope.newLatestScores = [{}];
+            getNewLatestScores().then(function () {
                 for (var i = 0; i < 10; i++) {
-                    console.log(i);
-                    console.log(newLatestScores[i]);
                     firebase.database().ref('Latest/' + i.toString()).set({
-                        user: newLatestScores[i].username,
-                        text: newLatestScores[i].text,
-                        speed: newLatestScores[i].result,
+                        user: $scope.newLatestScores[i].username,
+                        text: $scope.newLatestScores[i].text,
+                        speed: $scope.newLatestScores[i].result,
                         Index: i + 1
                     })
                 }
             })
         };
 
-        async function getNewLatestScores(newLatestScores) {
-            console.log(firebase.auth().currentUser.isAnonymous);
+        function getNewLatestScores() {
+            var promises = [];
             for (var i = 9; i >= 0; i--) {
                 if (i == 0 && firebase.auth().currentUser.isAnonymous === false) {
-                    newLatestScores[i] = ({
+                    $scope.newLatestScores[i] = ({
                         'username': firebase.auth().currentUser.email,
-                        'text': document.getElementById('Title').textContent,
+                        'text': $scope.trivia.title,
                         'result': $scope.wordsperminute
                     })
                 }
                 else if (i == 0 && firebase.auth().currentUser.isAnonymous === true) {
-                    newLatestScores[i] = ({
+                    $scope.newLatestScores[i] = ({
                         'username': "Anonymous",
-                        'text': document.getElementById('Title').textContent,
+                        'text': $scope.trivia.title,
                         'result': $scope.wordsperminute
                     })
                 }
                 else {
-                    await firebase.database().ref('Latest/' + (i - 1).toString()).once('value').then(function (snapshot) {
-                        newLatestScores[snapshot.val().Index] = ({
+                    promises.push(firebase.database().ref('Latest/' + (i - 1).toString()).once('value').then(function (snapshot) {
+                        $scope.newLatestScores[snapshot.val().Index] = ({
                             'username': snapshot.val().user,
                             'text': snapshot.val().text,
                             'result': snapshot.val().speed
                         })
-                    })
+                    }))
                 }
 
             }
+            return Promise.all(promises);
         }
     }
     ]);

@@ -1,15 +1,15 @@
 angular.module('szybkiePisanie')
     .controller('HomeCtrl', ["$scope", "$rootScope", "$firebaseAuth", "$interval", function ($scope, $rootScope, $firebaseAuth, $interval) {
-        if (firebase.auth().currentUser == null) firebase.auth().signInAnonymously();
-
         $scope.results = [{}];
+        var promises = [];
 
+        if(firebase.auth().currentUser === null)promises.push(firebase.auth().signInAnonymously());
+
+        Promise.all(promises).then(function() {
         for (i = 0; i < 10; i++) {
             firebase.database().ref('Latest/' + i.toString()).once('value').then(function (snapshot) {
-                var Index = snapshot.val().Index;
-
-
-                $scope.results[Index - 1] = ({
+                $scope.index = snapshot.val().Index;
+                $scope.results[$scope.index - 1] = ({
                     'username': snapshot.val().user.toString(),
                     'text': snapshot.val().text.toString(),
                     'result': snapshot.val().speed.toString()
@@ -24,10 +24,10 @@ angular.module('szybkiePisanie')
         $interval(function () {
             for (i = 0; i < 10; i++) {
                 firebase.database().ref('Latest/' + i.toString()).once('value').then(function (snapshot) {
-                    var Index = snapshot.val().Index;
+                    $scope.index = snapshot.val().Index;
 
 
-                    $scope.results[Index - 1] = ({
+                    $scope.results[$scope.index  - 1] = ({
                         'username': snapshot.val().user.toString(),
                         'text': snapshot.val().text.toString(),
                         'result': snapshot.val().speed.toString()
@@ -37,5 +37,5 @@ angular.module('szybkiePisanie')
                 })
             }
         }, 5000);
-
+        })
     }])
