@@ -1,5 +1,6 @@
 angular.module('szybkiePisanie')
     .controller("ProfileCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
+        $scope.email;
         var user = firebase.auth().currentUser;
         document.getElementById('activationEmail').addEventListener('click', function () {
             user = firebase.auth().currentUser;
@@ -10,7 +11,7 @@ angular.module('szybkiePisanie')
             }, function (error) { alert(error) })
         });
         if (user) {
-            document.getElementById('email').textContent = user.email;
+            $scope.email = user.email;
             if (user.emailVerified === false) {
                 document.getElementById('emailVerified').textContent = 'nie';
                 document.getElementById('emailVerifiedRow').className = 'danger';
@@ -22,7 +23,7 @@ angular.module('szybkiePisanie')
             }
         }
         else {
-            document.getElementById('email').textContent = "";
+            $scope.email = "";
             document.getElementById('emailVerified').textContent = "";
         }
     }]);
