@@ -72,3 +72,10 @@ body{
 .logout {
     cursor: pointer;
 }
+
+#login-alert {
+    position: absolute;
+    top: 20%;
+    z-index : 9000;
+    width: 100%;
+}

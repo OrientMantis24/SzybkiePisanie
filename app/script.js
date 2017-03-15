@@ -13,13 +13,18 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
         }
 
     firebase.auth().onAuthStateChanged(function (user) {
-        debugger;
         if (user && user.isAnonymous === false) {
                 $rootScope.navbarRightProfile = user.email;
                 $rootScope.navbarRightLogout = "Wyloguj się";
                 $rootScope.signInProfile = "#profile";
                 $rootScope.linkEnabled = false;
                 $rootScope.email = user.email;
+                var newElement = angular.element("<div id=\"login-alert\" class=\"alert alert-success\"><strong>Zalogowano się pomyślnie.</strong></div>");
+                var target = document.getElementById("alertContainer");
+                angular.element(target).append(newElement);
+                $("#login-alert").fadeTo(2000,500).slideUp(500, function(){
+                    $("#login-alert").slideUp(500);
+                })
 
                 if(user.emailVerified) {
                     $rootScope.emailVerified  = true;
