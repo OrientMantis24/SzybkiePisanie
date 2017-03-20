@@ -19,6 +19,9 @@
   <!-- SCRIPTS -->
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-sanitize.js"></script>
   <script src="script.js"></script>
   <script src="Home/HomeCtrl.js"></script>
   <script src="Practice/PracticeCtrl.js"></script>
@@ -30,13 +33,20 @@
 
 <body style="padding:0px; background-color: #e3ecf9">
 
-  <nav id="navbar" class="navbar navbar-default">
+  <nav id="navbar" class="navbar navbar-default" role="navigation">
     <div class="container">
       <div class="navbar-header">
+        <button type="button"id="navbar-toggle" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
+				
+				<span id="icon-bar" class="icon-bar"></span>
+				<span id="icon-bar" class="icon-bar"></span>
+				<span id="icon-bar" class="icon-bar"></span>
+			</button>
         <a class="navbar-brand" href="#home" id="navbar-text">Szybkie Pisanie</a>
       </div>
 
-      <ul class="nav navbar-nav navbar" >
+      <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="isNavCollapsed">
+			<ul class="nav navbar-nav navbar" >
         <li class="hvr-rotate"><a href="#practice" id="navbar-text"><i class="fa fa-tasks"></i> Trening</a></li>
         <li class="hvr-rotate"><a href="http://www.szybkiepisanieweb.wordpress.com" id="navbar-text"><i class="fa fa-book"></i> BLOG</a></li>
       </ul>
@@ -45,6 +55,7 @@
         <li><a id="navbar-text" ng-href={{signInProfile}}><i class="fa fa-home"></i> {{navbarRightProfile}}</a></li>
         <li><a id="navbar-text" ng-click="logoutClick()" class="logout"><i class="fa fa-shield"></i> {{navbarRightLogout}}</a></li>
       </ul>
+      </div>
 
     </div>
   </nav>

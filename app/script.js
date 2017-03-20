@@ -1,5 +1,5 @@
-angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
-    .run(['$rootScope', function($rootScope) {
+angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnimate'])
+    .run(['$rootScope', '$location' , function($rootScope, $location) {
         $rootScope.navbarRightLogout = "";
         $rootScope.navbarRightProfile = "";
         $rootScope.linkEnabled;
@@ -7,9 +7,15 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
         $rootScope.sendVerificationEmail = true;
         $rootScope.verificationEmailSent = false;
         $rootScope.showVerificationStatus = true;
+        $rootScope.loggedOutByButton = false;
+        $rootScope.isNavCollapsed = true;
+        $rootScope.alertBoxPosition = (document.getElementById('navbar').getBoundingClientRect().top + document.getElementById('navbar').style.height + 20).toString() + "px";
         $rootScope.logoutClick = function() {
             if($rootScope.linkEnabled)window.location = "#register";
-            else firebase.auth().signOut();
+            else {
+                $rootScope.loggedOutByButton = true;
+                firebase.auth().signOut();
+            }
         }
 
     firebase.auth().onAuthStateChanged(function (user) {
@@ -19,12 +25,9 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
                 $rootScope.signInProfile = "#profile";
                 $rootScope.linkEnabled = false;
                 $rootScope.email = user.email;
-                var newElement = angular.element("<div id=\"login-alert\" class=\"alert alert-success\"><strong>Zalogowano się pomyślnie.</strong></div>");
-                var target = document.getElementById("alertContainer");
-                angular.element(target).append(newElement);
-                $("#login-alert").fadeTo(2000,500).slideUp(500, function(){
-                    $("#login-alert").slideUp(500);
-                })
+                $rootScope.makeAlert("Zalogowano się.");
+
+                if($location.path() == '/signin')$location.path('/home');
 
                 if(user.emailVerified) {
                     $rootScope.emailVerified  = true;
@@ -44,15 +47,32 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase'])
                    
                 
         } else {
+            if($rootScope.loggedOutByButton){
+                $rootScope.makeAlert("Wylogowano się.");
+                $rootScope.loggedOutByButton = false;
+            }
+             if($location.path() == '/profile')$location.path('/home');
              $rootScope.navbarRightProfile = "Zaloguj się";
              $rootScope.navbarRightLogout = "Zarejestruj się";
              $rootScope.signInProfile = "#signin";
              $rootScope.linkEnabled = true;
              $rootScope.$apply();
         }
+
     })
 
-    }])
+    $rootScope.makeAlert = function(text) {
+        var newElement = angular.element("<div id=\"login-alert\" class=\"alert alert-success\" ng-style=\"{'top' : alertBoxPosition}\"><strong>" + text + "</strong></div>");
+                var target = document.getElementById("alertContainer");
+                angular.element(target).append(newElement);
+                $("#login-alert").fadeTo(2000,500).slideUp(500, function(){
+                    $("#login-alert").slideUp(400);
+                    angular.element(target).empty();
+                })
+    }
+
+    }
+    ])
     .config(['$routeProvider',
         function ($routeProvider) {
             $routeProvider
