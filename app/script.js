@@ -9,6 +9,7 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnim
         $rootScope.showVerificationStatus = true;
         $rootScope.loggedOutByButton = false;
         $rootScope.isNavCollapsed = true;
+        $rootScope.justRegistered = false;
         $rootScope.alertBoxPosition = (document.getElementById('navbar').getBoundingClientRect().top + document.getElementById('navbar').style.height + 20).toString() + "px";
         $rootScope.logoutClick = function() {
             if($rootScope.linkEnabled)window.location = "#register";
@@ -25,9 +26,13 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnim
                 $rootScope.signInProfile = "#profile";
                 $rootScope.linkEnabled = false;
                 $rootScope.email = user.email;
-                $rootScope.makeAlert("Zalogowano się.");
+                if(!$rootScope.justRegistered)$rootScope.makeAlert("Zalogowano się.", "success");
+                else {
+                    $rootScope.makeAlert("Zarejestrowano się pomyślnie", "success");
+                    $rootScope.justRegistered = false;
+                }
 
-                if($location.path() == '/signin')$location.path('/home');
+                if($location.path() == '/signin' || $location.path() == '/register')$location.path('/home');
 
                 if(user.emailVerified) {
                     $rootScope.emailVerified  = true;
@@ -48,7 +53,7 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnim
                 
         } else {
             if($rootScope.loggedOutByButton){
-                $rootScope.makeAlert("Wylogowano się.");
+                $rootScope.makeAlert("Wylogowano się.", "success");
                 $rootScope.loggedOutByButton = false;
             }
              if($location.path() == '/profile')$location.path('/home');
@@ -61,14 +66,15 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnim
 
     })
 
-    $rootScope.makeAlert = function(text) {
-        var newElement = angular.element("<div id=\"login-alert\" class=\"alert alert-success\" ng-style=\"{'top' : alertBoxPosition}\"><strong>" + text + "</strong></div>");
-                var target = document.getElementById("alertContainer");
-                angular.element(target).append(newElement);
-                $("#login-alert").fadeTo(2000,500).slideUp(500, function(){
-                    $("#login-alert").slideUp(400);
-                    angular.element(target).empty();
-                })
+    $rootScope.makeAlert = function(text, state) {
+        var newElement = angular.element("<div id=\"login-alert\" class=\"alert alert-" + state.toString() + "\" ng-style=\"{'top' : alertBoxPosition}\"><strong>" + text.toString() + "</strong></div>");
+        var target = document.getElementById("alertContainer");
+        
+            angular.element(target).empty();
+        angular.element(target).append(newElement);
+        $("#login-alert").fadeTo(2000,500).slideUp(500, function(){
+            $("#login-alert").slideUp(400);
+        })
     }
 
     }
