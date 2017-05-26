@@ -1,6 +1,7 @@
 angular.module('szybkiePisanie')
     .controller("PracticeCtrl", ["$scope", "$firebaseAuth", function ($scope, $firebaseAuth) {
-        var randomNumber = Math.floor((Math.random() * 2) + 0);
+        var textCount = 4;
+        var randomNumber = Math.floor((Math.random() * textCount) + 0);
         var start = 0;
         $scope.text;
         $scope.showTrivia = false;
@@ -22,7 +23,7 @@ angular.module('szybkiePisanie')
         $scope.counter = 0;
         $scope.progressBar = {
             "width": "0%"
-        }
+        };
 
         var promises = [];
 

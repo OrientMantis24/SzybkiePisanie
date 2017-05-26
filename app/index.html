@@ -4,31 +4,35 @@
 
 <head>
 
-  <link rel ="shortcup icon" type="image/png" href="/assets/favicon.png"/>
+	<title ng-bind="$root.title + '- Szybkie Pisanie'">MyApp - Welcome</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!--CSS-->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+	<link rel ="shortcup icon" type="image/png" href="/assets/favicon.png"/>
+
+	<!--CSS-->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
 	<link rel="stylesheet" href="//getbootstrap.com/examples/signin/signin.css">
-  <link rel="stylesheet" href="css/index.css" />
-  <link href="/Home/home.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/index.css" />
+	<link href="/Home/home.css" rel="stylesheet">
 	<link href="/Practice/practice.css" rel="stylesheet">
-  <link href="/SignIn/signin.css" rel="stylesheet">
+	<link href="/SignIn/signin.css" rel="stylesheet">
 	<link href="/Register/register.css" rel="stylesheet">
 
-  <!-- SCRIPTS -->
-  <script src="bower_components/angular/angular.min.js"></script>
-  <script src="bower_components/angular-route/angular-route.min.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-sanitize.js"></script>
-  <script src="script.js"></script>
-  <script src="Home/HomeCtrl.js"></script>
-  <script src="Practice/PracticeCtrl.js"></script>
-  <script src="SignIn/SignInCtrl.js"></script>
-  <script src="Register/RegisterCtrl.js"></script>
-  <script src="Profile/ProfileCtrl.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- SCRIPTS -->
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-route/angular-route.min.js"></script>
+	<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-sanitize.js"></script>
+	<script src="script.js"></script>
+	<script src="Home/HomeCtrl.js"></script>
+	<script src="Practice/PracticeCtrl.js"></script>
+	<script src="SignIn/SignInCtrl.js"></script>
+	<script src="Register/RegisterCtrl.js"></script>
+	<script src="Profile/ProfileCtrl.js"></script>
+	<script src="Race/RaceCtrl.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body style="padding:0px; background-color: #e3ecf9">
@@ -45,10 +49,10 @@
         <a class="navbar-brand" href="#home" id="navbar-text">Szybkie Pisanie</a>
       </div>
 
-      <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="isNavCollapsed">
+      <div class="collapse navbar-collapse cl-effect-4" id="navbar-collapse" uib-collapse="isNavCollapsed">
 			<ul class="nav navbar-nav navbar" >
-        <li class="hvr-rotate"><a href="#practice" id="navbar-text"><i class="fa fa-tasks"></i> Trening</a></li>
-        <li class="hvr-rotate"><a href="http://www.szybkiepisanieweb.wordpress.com" id="navbar-text"><i class="fa fa-book"></i> BLOG</a></li>
+        <li><a href="#practice" id="navbar-text"><i class="fa fa-tasks"></i> Trening</a></li>
+        <li><a href="http://www.szybkiepisanieweb.wordpress.com" id="navbar-text"><i class="fa fa-book"></i> BLOG</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right" id="notLoggedIn">

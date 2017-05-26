@@ -1,5 +1,14 @@
 angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnimate'])
-    .run(['$rootScope', '$location' , function($rootScope, $location) {
+    .run(['$rootScope', '$location', '$route', function($rootScope, $location, $route) {
+        
+        $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
+        $rootScope.title = $route.current.title;
+    });
+    
+    
+        $rootScope.roomFound = false;
+        $rootScope.roomNumberFound = 0;
+        $rootScope.slotNumber = 0;
         $rootScope.navbarRightLogout = "";
         $rootScope.navbarRightProfile = "";
         $rootScope.linkEnabled;
@@ -77,28 +86,39 @@ angular.module('szybkiePisanie', ['ngRoute', 'firebase', 'ui.bootstrap', 'ngAnim
         function ($routeProvider) {
             $routeProvider
                 .when('/home', {
+                    title: 'Strona Domowa',
                     templateUrl: 'Home/home.html',
                     controller: 'HomeCtrl'
                 })
 
                 .when('/practice', {
+                    title: 'Trening',
                     templateUrl: 'Practice/practice.html',
                     controller: 'PracticeCtrl'
                 })
 
                 .when('/signin', {
+                    title: 'Zaloguj się',
                     templateUrl: 'SignIn/signin.html',
                     controller: 'SignInCtrl'
                 })
 
                 .when('/profile', {
+                    title: 'Profil',
                     templateUrl: 'Profile/profile.html',
                     controller: 'ProfileCtrl'
                 })
                 
                 .when('/register', {
+                    title: 'Zarejestruj się',
                     templateUrl: 'Register/register.html',
                     controller: 'RegisterCtrl'
+                })
+                
+                .when('/race', {
+                    title: 'Wyścig',
+                    templateUrl: 'Race/race.html',
+                    controller: 'RaceCtrl'
                 })
 
                 .otherwise({
